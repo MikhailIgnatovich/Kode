@@ -51,6 +51,7 @@
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout_categories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -87,6 +88,14 @@
                     android:text="@string/item_tab_io" />
 
             </com.google.android.material.tabs.TabLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_people"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tab_layout_categories"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
