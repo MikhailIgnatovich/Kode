@@ -17,4 +17,9 @@
     <style name="MyStyle" parent="Widget.AppCompat.SearchView">
         <item name="hintTextColor">#C3C3C6</item>
     </style>
+    
+    <style name="MyTabsStyle" parent="Widget.MaterialComponents.TabLayout">
+        <item name="android:textSize">15sp</item>
+        <item name="textAllCaps">false</item>
+    </style>
 </resources>
