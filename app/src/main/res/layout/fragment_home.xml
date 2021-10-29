@@ -22,33 +22,32 @@
                 <com.google.android.material.appbar.AppBarLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:layout_marginTop="16dp"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
+                    android:background="@color/white"
                     app:elevation="0dp">
 
                     <com.google.android.material.appbar.MaterialToolbar
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
-                        android:background="@drawable/background_toolbar_border">
+                        android:background="@drawable/background_toolbar_border"
+                        app:menu="@menu/filter_menu">
 
                         <androidx.appcompat.widget.SearchView
+                            style="@style/MyStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:queryHint="Введите имя, тег, почту..."
                             app:iconifiedByDefault="false"
-                            style="@style/MyStyle"
-                            app:searchIcon="@drawable/search_icon"/>
+                            app:queryHint="@string/searchview_hint"
+                            app:searchIcon="@drawable/search_icon" />
 
 
                     </com.google.android.material.appbar.MaterialToolbar>
 
                 </com.google.android.material.appbar.AppBarLayout>
 
-
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
