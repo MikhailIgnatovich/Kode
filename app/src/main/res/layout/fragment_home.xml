@@ -37,7 +37,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:queryHint="Введите имя, тег, почту..."
-                            app:iconifiedByDefault="false"/>
+                            app:iconifiedByDefault="false"
+                            style="@style/MyStyle"
+                            app:searchIcon="@drawable/search_icon"/>
 
 
                     </com.google.android.material.appbar.MaterialToolbar>
