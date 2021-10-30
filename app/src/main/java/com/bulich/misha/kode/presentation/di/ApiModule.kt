@@ -13,9 +13,10 @@ import javax.inject.Singleton
 @Module
 class ApiModule {
 
+
     @Singleton
     @Provides
-    fun provideGetOkHttpClient():OkHttpClient {
+    fun provideGetOkHttpClient(): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
@@ -27,7 +28,7 @@ class ApiModule {
     @Provides
     fun provideGetRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://stoplight.io/mocks/kode-education/trainee-test/25143926")
+            .baseUrl("https://stoplight.io/mocks/kode-education/trainee-test/25143926/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
