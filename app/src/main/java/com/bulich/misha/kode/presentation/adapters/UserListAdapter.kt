@@ -26,6 +26,7 @@ class UserListAdapter : ListAdapter<UserEntity, UserListAdapter.UserListViewHold
         binding.tvTag.text = userItem.userTag
         Glide.with(binding.ivPhoto.context)
             .load(userItem.avatarUrl)
+            .circleCrop()
             .into(binding.ivPhoto)
     }
 }
