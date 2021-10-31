@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background_toolbar_border_color">#F7F7F8</color>
     <color name="tab_text_selected">#050510</color>
+    <color name="tv_position_text_color">#55555C</color>
+    <color name="tv_tag_text_color">#97979B</color>
 </resources>
