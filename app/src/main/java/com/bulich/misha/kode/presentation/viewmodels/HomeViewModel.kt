@@ -36,7 +36,11 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
 
             val firstNameFilterList = _userList.value?.filter { it.firstName.startsWith(name.lowercase()) }
             val lastNameFilterList = _userList.value?.filter { it.lastName.startsWith(name.lowercase()) }
-            val userTagFilterList = _userList.value?.filter { it.userTag.startsWith(name.lowercase()) }
+            val userTagFilterList = when(true) {
+                name.length in 0..2  -> {_userList.value?.filter { it.userTag.startsWith(name.lowercase()) }}
+                else -> {_userList.value?.filter { it.userTag.startsWith(name.lowercase().subSequence(0, 2)) }}
+            }
+
             val list = HashSet<UserEntity>()
             list.addAll(firstNameFilterList!!)
             list.addAll(lastNameFilterList!!)

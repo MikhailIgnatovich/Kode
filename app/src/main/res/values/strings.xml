@@ -2,7 +2,7 @@
     <string name="app_name">Kode</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="searchview_hint">Введите имя, тег, почту...</string>
+    <string name="searchView_hint">Введите имя, тег, почту...</string>
     <string name="filter_item_menu">Фильтр</string>
     <string name="item_tab_all">Все</string>
     <string name="item_tab_designer">Designer</string>
