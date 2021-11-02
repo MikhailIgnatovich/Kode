@@ -22,6 +22,8 @@ class UserListAdapter : ListAdapter<UserEntity, UserListAdapter.UserListViewHold
         val userItem = getItem(position)
         val binding = holder.binding
         binding.tvName.text = String.format(userItem.firstName + " " + userItem.lastName)
+        binding.tvName.text = String.format(userItem.firstName.replaceFirstChar { it.uppercase() }
+                + " " + userItem.lastName.replaceFirstChar { it.uppercase() })
         binding.tvPosition.text = userItem.position
         binding.tvTag.text = userItem.userTag
         Glide.with(binding.ivPhoto.context)

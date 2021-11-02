@@ -10,9 +10,9 @@ class UserMapper @Inject constructor() {
         return UserEntity(
             id = user.id,
             avatarUrl = user.avatarUrl,
-            firstName = user.firstName,
-            lastName = user.lastName,
-            userTag = user.userTag,
+            firstName = user.firstName.lowercase(),
+            lastName = user.lastName.lowercase(),
+            userTag = user.userTag.lowercase(),
             department = user.department,
             position = user.position,
             birthday = user.birthday,

@@ -2,10 +2,13 @@ package com.bulich.misha.kode.presentation.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableLayout
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.bulich.misha.kode.R
 import com.bulich.misha.kode.databinding.FragmentHomeBinding
@@ -13,6 +16,7 @@ import com.bulich.misha.kode.presentation.adapters.UserListAdapter
 import com.bulich.misha.kode.presentation.appComponent
 import com.bulich.misha.kode.presentation.factories.HomeViewModelFactory
 import com.bulich.misha.kode.presentation.viewmodels.HomeViewModel
+import com.google.android.material.tabs.TabLayout
 import java.lang.RuntimeException
 import javax.inject.Inject
 
@@ -48,9 +52,67 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.userList.observe(viewLifecycleOwner){
-            userAdapter.submitList(it)
+
+        binding.mySearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                viewModel.filterNameList(newText)
+                return true
+            }
+
+        })
+
+        if (binding.tabLayoutCategories.selectedTabPosition == 0) {
+            viewModel.userFilterList.observe(viewLifecycleOwner){
+                userAdapter.submitList(it)
+            }
         }
+
+        binding.tabLayoutCategories.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+
+                when(tab?.position){
+                    0 -> {
+                        viewModel.userFilterList.observe(viewLifecycleOwner){
+                            userAdapter.submitList(it)
+                        }
+                    }
+                    1 -> {
+                        viewModel.userFilterList.observe(viewLifecycleOwner){
+                            userAdapter.submitList(it.filter { it.department == "design" })
+                        }
+                    }
+                    2 -> {
+                        viewModel.userFilterList.observe(viewLifecycleOwner){
+                            userAdapter.submitList(it.filter { it.department == "analytics" })
+                        }
+                    }
+                    3 -> {
+                        viewModel.userFilterList.observe(viewLifecycleOwner){
+                            userAdapter.submitList(it.filter { it.department == "management" })
+                        }
+                    }
+                    4 -> {
+                        viewModel.userFilterList.observe(viewLifecycleOwner){
+                            userAdapter.submitList(it.filter { it.department == "ios" })
+                        }
+                    }
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
+        })
 
     }
 

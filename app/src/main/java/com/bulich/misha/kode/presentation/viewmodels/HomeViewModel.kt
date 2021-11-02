@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.bulich.misha.kode.domain.entity.UserEntity
 import com.bulich.misha.kode.domain.useCase.GetListUserEntityUseCase
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 
 class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCase) : ViewModel() {
 
@@ -14,13 +15,34 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
     val userList: LiveData<List<UserEntity>>
         get() = _userList
 
+    private var _userFilterList = MutableLiveData<List<UserEntity>>()
+    val userFilterList: LiveData<List<UserEntity>>
+        get() = _userFilterList
+
     init {
         getUserList()
     }
 
-    fun getUserList() {
+    private fun getUserList() {
         viewModelScope.launch {
             _userList.value = getListUserEntityUseCase.getListUserEntity()
+            _userFilterList.value = _userList.value
+        }
+    }
+
+    fun filterNameList(name: String) {
+        viewModelScope.launch {
+            _userFilterList.value = _userList.value
+
+            val firstNameFilterList = _userList.value?.filter { it.firstName.startsWith(name.lowercase()) }
+            val lastNameFilterList = _userList.value?.filter { it.lastName.startsWith(name.lowercase()) }
+            val userTagFilterList = _userList.value?.filter { it.userTag.startsWith(name.lowercase()) }
+            val list = HashSet<UserEntity>()
+            list.addAll(firstNameFilterList!!)
+            list.addAll(lastNameFilterList!!)
+            list.addAll(userTagFilterList!!)
+
+            _userFilterList.value = list.toList()
         }
     }
 
