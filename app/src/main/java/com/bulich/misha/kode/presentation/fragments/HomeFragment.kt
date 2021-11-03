@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TableLayout
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
+import androidx.transition.Visibility
 import com.bulich.misha.kode.R
 import com.bulich.misha.kode.databinding.FragmentHomeBinding
 import com.bulich.misha.kode.presentation.adapters.UserListAdapter
@@ -44,7 +45,6 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         setupRecyclerView()
         return binding.root
@@ -66,6 +66,11 @@ class HomeFragment : Fragment() {
 
         })
 
+        viewModel.checkList.observe(viewLifecycleOwner){
+            visibilityCheck(it)
+        }
+
+
         if (binding.tabLayoutCategories.selectedTabPosition == 0) {
             viewModel.userFilterList.observe(viewLifecycleOwner){
                 userAdapter.submitList(it)
@@ -75,33 +80,38 @@ class HomeFragment : Fragment() {
         binding.tabLayoutCategories.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
 
-                when(tab?.position){
-                    0 -> {
-                        viewModel.userFilterList.observe(viewLifecycleOwner){
-                            userAdapter.submitList(it)
-                        }
-                    }
-                    1 -> {
-                        viewModel.userFilterList.observe(viewLifecycleOwner){
-                            userAdapter.submitList(it.filter { it.department == "design" })
-                        }
-                    }
-                    2 -> {
-                        viewModel.userFilterList.observe(viewLifecycleOwner){
-                            userAdapter.submitList(it.filter { it.department == "analytics" })
-                        }
-                    }
-                    3 -> {
-                        viewModel.userFilterList.observe(viewLifecycleOwner){
-                            userAdapter.submitList(it.filter { it.department == "management" })
-                        }
-                    }
-                    4 -> {
-                        viewModel.userFilterList.observe(viewLifecycleOwner){
-                            userAdapter.submitList(it.filter { it.department == "ios" })
-                        }
-                    }
+                viewModel.userFilterList.observe(viewLifecycleOwner){
+                    userAdapter.submitList(viewModel.departmentFilter(it, tab?.position))
                 }
+
+//                when(tab?.position){
+//                    0 -> {
+//                        viewModel.userFilterList.observe(viewLifecycleOwner){
+//
+//                            userAdapter.submitList(it)
+//                        }
+//                    }
+//                    1 -> {
+//                        viewModel.userFilterList.observe(viewLifecycleOwner){
+//                            userAdapter.submitList(viewModel.departmentFilter(it, tab.position))
+//                        }
+//                    }
+//                    2 -> {
+//                        viewModel.userFilterList.observe(viewLifecycleOwner){
+//                            userAdapter.submitList(viewModel.departmentFilter(it, tab.position))
+//                        }
+//                    }
+//                    3 -> {
+//                        viewModel.userFilterList.observe(viewLifecycleOwner){
+//                            userAdapter.submitList(viewModel.departmentFilter(it, tab.position))
+//                        }
+//                    }
+//                    4 -> {
+//                        viewModel.userFilterList.observe(viewLifecycleOwner){
+//                            userAdapter.submitList(viewModel.departmentFilter(it, tab.position))
+//                        }
+//                    }
+//                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -114,6 +124,16 @@ class HomeFragment : Fragment() {
 
         })
 
+    }
+
+    private fun visibilityCheck(it: Boolean) {
+        if (!it) {
+            binding.recyclerViewPeople.visibility = View.GONE
+            binding.emptySearch.visibility = View.VISIBLE
+        } else {
+            binding.recyclerViewPeople.visibility = View.VISIBLE
+            binding.emptySearch.visibility = View.GONE
+        }
     }
 
     private fun setupRecyclerView() {

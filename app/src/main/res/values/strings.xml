@@ -9,4 +9,6 @@
     <string name="item_tab_analysts">Analysts</string>
     <string name="item_tab_managers">Managers</string>
     <string name="item_tab_io">iOS</string>
+    <string name="tv_search_empty_text1">Мы никого не нашли</string>
+    <string name="tv_search_empty_text2">Попробуй скорректировать запрос</string>
 </resources>
