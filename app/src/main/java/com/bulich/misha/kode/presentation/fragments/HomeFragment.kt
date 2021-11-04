@@ -3,12 +3,12 @@ package com.bulich.misha.kode.presentation.fragments
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TableLayout
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.transition.Visibility
 import com.bulich.misha.kode.R
@@ -22,7 +22,7 @@ import java.lang.RuntimeException
 import javax.inject.Inject
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     @Inject
     lateinit var factory: HomeViewModelFactory
@@ -39,13 +39,20 @@ class HomeFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
+        setHasOptionsMenu(true)
         super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+//        binding.toolbarHomeFragment.inflateMenu(R.menu.filter_menu)
+        binding.toolbarHomeFragment.setOnMenuItemClickListener(this)
         setupRecyclerView()
         return binding.root
     }
@@ -83,35 +90,6 @@ class HomeFragment : Fragment() {
                 viewModel.userFilterList.observe(viewLifecycleOwner){
                     userAdapter.submitList(viewModel.departmentFilter(it, tab?.position))
                 }
-
-//                when(tab?.position){
-//                    0 -> {
-//                        viewModel.userFilterList.observe(viewLifecycleOwner){
-//
-//                            userAdapter.submitList(it)
-//                        }
-//                    }
-//                    1 -> {
-//                        viewModel.userFilterList.observe(viewLifecycleOwner){
-//                            userAdapter.submitList(viewModel.departmentFilter(it, tab.position))
-//                        }
-//                    }
-//                    2 -> {
-//                        viewModel.userFilterList.observe(viewLifecycleOwner){
-//                            userAdapter.submitList(viewModel.departmentFilter(it, tab.position))
-//                        }
-//                    }
-//                    3 -> {
-//                        viewModel.userFilterList.observe(viewLifecycleOwner){
-//                            userAdapter.submitList(viewModel.departmentFilter(it, tab.position))
-//                        }
-//                    }
-//                    4 -> {
-//                        viewModel.userFilterList.observe(viewLifecycleOwner){
-//                            userAdapter.submitList(viewModel.departmentFilter(it, tab.position))
-//                        }
-//                    }
-//                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -147,4 +125,12 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.filter_item -> Toast.makeText(context, "Привет", Toast.LENGTH_SHORT).show()
+        }
+        return true
+    }
+
 }
