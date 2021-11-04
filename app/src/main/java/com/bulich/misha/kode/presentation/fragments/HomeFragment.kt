@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.transition.Visibility
 import com.bulich.misha.kode.R
 import com.bulich.misha.kode.databinding.FragmentHomeBinding
@@ -128,7 +129,7 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when(item?.itemId) {
-            R.id.filter_item -> Toast.makeText(context, "Привет", Toast.LENGTH_SHORT).show()
+            R.id.filter_item -> {findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSortBottomSheetFragment())}
         }
         return true
     }
