@@ -1,79 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.fragments.SortBottomSheetFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        tools:context=".presentation.fragments.SortBottomSheetFragment">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_up_border"
-            android:layout_width="54dp"
-            android:layout_height="4dp"
-            android:layout_marginTop="12dp"
-            android:background="#C3C3C6"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_sort"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:fontFamily="@font/inter_semi_bold"
-            android:text="@string/tv_sort_text"
-            android:textColor="@color/tab_text_selected"
-            android:textSize="20sp"
-            android:textStyle="normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_up_border" />
-
-        <RadioGroup
-            android:id="@+id/radio_group_sort"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="36dp"
-            android:checkedButton="@id/radio_button_alphabet"
-            app:layout_constraintTop_toBottomOf="@id/tv_sort">
+            android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/radio_button_alphabet"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_up_border"
+                android:layout_width="54dp"
+                android:layout_height="4dp"
+                android:layout_marginTop="12dp"
+                android:background="#C3C3C6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="@font/inter_medium"
-                android:text="По алфавиту"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/inter_semi_bold"
+                android:text="@string/tv_sort_text"
                 android:textColor="@color/tab_text_selected"
-                android:textSize="16sp" />
+                android:textSize="20sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_up_border" />
 
-            <RadioButton
-                android:id="@+id/radio_button_birthday"
+            <RadioGroup
+                android:id="@+id/radio_group_sort"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/inter_medium"
-                android:text="По дню рождения"
-                android:textColor="@color/tab_text_selected"
-                android:textSize="16sp" />
-        </RadioGroup>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="36dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_sort">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_down_border"
-            android:layout_width="134dp"
-            android:layout_height="5dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="9dp"
-            android:background="#C3C3C6"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/radio_group_sort" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <RadioButton
+                    android:id="@+id/radio_button_alphabet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="По алфавиту"
+                    android:textColor="@color/tab_text_selected"
+                    android:textSize="16sp" />
 
-</FrameLayout>
+                <RadioButton
+                    android:id="@+id/radio_button_birthday"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="По дню рождения"
+                    android:textColor="@color/tab_text_selected"
+                    android:textSize="16sp" />
+            </RadioGroup>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_down_border"
+                android:layout_width="134dp"
+                android:layout_height="5dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="9dp"
+                android:background="#C3C3C6"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/radio_group_sort" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+</layout>

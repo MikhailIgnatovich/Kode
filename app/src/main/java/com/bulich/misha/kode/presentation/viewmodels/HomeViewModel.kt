@@ -28,7 +28,7 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
 
     }
 
-    private fun getUserList() {
+     fun getUserList() {
         viewModelScope.launch {
             _userList.value = getListUserEntityUseCase.getListUserEntity()
             _userFilterList.value = _userList.value
@@ -84,7 +84,8 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
 
             else -> emptyList<UserEntity>()
         }
+        val list2 = list1.sortedBy { it.firstName }
         _checkList.value = list1.isNotEmpty()
-        return list1
+        return list2
     }
 }

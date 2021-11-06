@@ -61,6 +61,11 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.swipResecler.setOnRefreshListener {
+            viewModel.getUserList()
+            binding.swipResecler.isRefreshing = false
+        }
+
         binding.mySearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
 
@@ -125,6 +130,11 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
