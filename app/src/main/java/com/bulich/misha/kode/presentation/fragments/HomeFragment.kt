@@ -9,6 +9,7 @@ import android.widget.TableLayout
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.transition.Visibility
@@ -46,6 +47,10 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val windows = activity?.window
+        windows?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        windows?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        windows?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
