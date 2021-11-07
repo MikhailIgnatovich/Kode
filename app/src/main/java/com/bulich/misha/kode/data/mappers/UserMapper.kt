@@ -2,6 +2,11 @@ package com.bulich.misha.kode.data.mappers
 
 import com.bulich.misha.kode.data.models.User
 import com.bulich.misha.kode.domain.entity.UserEntity
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.*
 import javax.inject.Inject
 
 class UserMapper @Inject constructor() {
@@ -15,7 +20,7 @@ class UserMapper @Inject constructor() {
             userTag = user.userTag.lowercase(),
             department = user.department,
             position = user.position,
-            birthday = user.birthday,
+            birthday = setupFormatDate(user.birthday),
             phone = user.phone
         )
     }
@@ -27,4 +32,19 @@ class UserMapper @Inject constructor() {
         }
         return list.toList()
     }
+
+    private fun setupFormatDate(string: String): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+//        val date = LocalDate.parse(string, formatter)
+//        val date1 = date.format()
+//        return date
+        val date = formatter.parse(string)
+        val date1 = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru")).format(date)
+        return date1
+
+    }
+//    val firstDate = "08/08/2019"
+//    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+//    val date = formatter.parse(firstDate)
+//    val desiredFormat = DateTimeFormatter.ofPattern("dd, MMM yyyy").format(date)
 }

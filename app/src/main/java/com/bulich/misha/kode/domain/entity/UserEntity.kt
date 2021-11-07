@@ -1,7 +1,11 @@
 package com.bulich.misha.kode.domain.entity
 
-import com.google.gson.annotations.SerializedName
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
+import java.time.LocalDateTime
 
+@Parcelize
 data class UserEntity(
     val id: String,
     val avatarUrl: String,
@@ -12,4 +16,4 @@ data class UserEntity(
     val position: String,
     val birthday: String,
     val phone: String
-)
+): Parcelable

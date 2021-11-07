@@ -90,8 +90,8 @@ class SortBottomSheetFragment : BottomSheetDialogFragment() {
 
 
     companion object {
-        private const val BUTTON_ALPHABET = "selected"
-        private const val BUTTON_BIRTHDAY = "birthday"
-        private const val SHARED_KEY = "shared"
+         const val BUTTON_ALPHABET = "selected"
+        const val BUTTON_BIRTHDAY = "birthday"
+         const val SHARED_KEY = "shared"
     }
 }

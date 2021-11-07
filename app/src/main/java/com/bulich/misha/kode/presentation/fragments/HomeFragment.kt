@@ -26,6 +26,8 @@ import javax.inject.Inject
 
 class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
+    private var tabPos: Int = 1
+
     @Inject
     lateinit var factory: HomeViewModelFactory
 
@@ -95,6 +97,7 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             }
         }
 
+
         binding.tabLayoutCategories.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
 
@@ -129,7 +132,15 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         with(binding.recyclerViewPeople) {
             userAdapter = UserListAdapter()
             adapter = userAdapter
+            setupRecyclerOnClickListener()
         }
+    }
+
+    private fun setupRecyclerOnClickListener(){
+        userAdapter.onUserEntityClickListener = {
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment2(it))
+        }
+
     }
 
     override fun onDestroyView() {
@@ -140,13 +151,19 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     override fun onResume() {
         super.onResume()
 
+
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when(item?.itemId) {
-            R.id.filter_item -> {findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSortBottomSheetFragment())}
+            R.id.filter_item -> {findNavController()
+                .navigate(HomeFragmentDirections.actionHomeFragmentToSortBottomSheetFragment())}
         }
         return true
+    }
+
+    private fun radioButtonStatus(){
+
     }
 
 }

@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -10,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.bulich.misha.kode"
-        minSdk 23
+        minSdk 26
         targetSdk 30
         versionCode 1
         versionName "1.0"

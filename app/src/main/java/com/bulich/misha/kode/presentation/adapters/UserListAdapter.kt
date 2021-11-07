@@ -10,6 +10,8 @@ import com.bumptech.glide.Glide
 
 class UserListAdapter : ListAdapter<UserEntity, UserListAdapter.UserListViewHolder>(UserItemDiffCallback()) {
 
+    var onUserEntityClickListener: ((UserEntity) -> Unit)? = null
+
     class UserListViewHolder(val binding: UserItemBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListViewHolder {
@@ -21,6 +23,9 @@ class UserListAdapter : ListAdapter<UserEntity, UserListAdapter.UserListViewHold
     override fun onBindViewHolder(holder: UserListViewHolder, position: Int) {
         val userItem = getItem(position)
         val binding = holder.binding
+        binding.root.setOnClickListener {
+            onUserEntityClickListener?.invoke(userItem)
+        }
         binding.tvName.text = String.format(userItem.firstName + " " + userItem.lastName)
         binding.tvName.text = String.format(userItem.firstName.replaceFirstChar { it.uppercase() }
                 + " " + userItem.lastName.replaceFirstChar { it.uppercase() })

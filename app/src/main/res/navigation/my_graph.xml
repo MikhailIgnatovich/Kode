@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_homeFragment_to_sortBottomSheetFragment"
             app:destination="@id/sortBottomSheetFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailsFragment2"
+            app:destination="@id/detailsFragment"
+            app:popUpTo="@id/homeFragment" />
     </fragment>
     <dialog
         android:id="@+id/sortBottomSheetFragment"
@@ -23,4 +27,16 @@
             android:id="@+id/action_sortBottomSheetFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </dialog>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.bulich.misha.kode.presentation.fragments.DetailsFragment"
+        android:label="DetailsFragment"
+        tools:layout="@layout/fragment_details">
+        <action
+            android:id="@+id/action_detailsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <argument
+            android:name="user_enttity"
+            app:argType="com.bulich.misha.kode.domain.entity.UserEntity" />
+    </fragment>
 </navigation>

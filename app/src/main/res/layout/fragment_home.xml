@@ -66,7 +66,6 @@
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/all_tab"
-                    android:focusableInTouchMode="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/item_tab_all" />
