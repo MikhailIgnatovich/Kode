@@ -4,8 +4,8 @@ import androidx.lifecycle.*
 import com.bulich.misha.kode.domain.entity.UserEntity
 import com.bulich.misha.kode.domain.useCase.GetListUserEntityUseCase
 import kotlinx.coroutines.launch
-import okhttp3.internal.wait
-import java.text.FieldPosition
+import java.util.*
+import kotlin.collections.HashSet
 
 class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCase) : ViewModel() {
 
@@ -17,26 +17,32 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
     val userFilterList: LiveData<List<UserEntity>>
         get() = _userFilterList
 
-    private var _checkList = MutableLiveData<Boolean>()
-    val checkList: LiveData<Boolean>
-        get() = _checkList
+    private var _checkListEmpty = MutableLiveData<Boolean>()
+    val checkListEmpty: LiveData<Boolean>
+        get() = _checkListEmpty
+
+    private var _sortMode = MutableLiveData<Boolean>()
+    val sortMode: LiveData<Boolean>
+        get() = _sortMode
 
 
     init {
         getUserList()
+    }
 
-
+    fun setSortMode(boolean: Boolean) {
+        _sortMode.value = boolean
     }
 
      fun getUserList() {
         viewModelScope.launch {
             _userList.value = getListUserEntityUseCase.getListUserEntity()
             _userFilterList.value = _userList.value
-            _checkList.value = true
+            _checkListEmpty.value = true
         }
     }
 
-    fun filterNameList(name: String) {
+    fun getFilterSearchList(name: String) {
         viewModelScope.launch {
 
             _userFilterList.value = _userList.value
@@ -60,18 +66,18 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
                 }
             }
 
-            val list = HashSet<UserEntity>()
-            list.addAll(firstNameFilterList!!)
-            list.addAll(lastNameFilterList!!)
-            list.addAll(userTagFilterList!!)
+            val filterList = HashSet<UserEntity>()
+            filterList.addAll(firstNameFilterList!!)
+            filterList.addAll(lastNameFilterList!!)
+            filterList.addAll(userTagFilterList!!)
 
-            _userFilterList.value = list.toList()
+            _userFilterList.value = filterList.toList()
         }
     }
 
-    fun departmentFilter(list: List<UserEntity>, position: Int?): List<UserEntity> {
+    fun getDepartmentFilterList(list: List<UserEntity>, position: Int?): List<UserEntity> {
 
-        val list1 = when (position) {
+        val departmentFilterList = when (position) {
             0 ->  list
 
             1 -> list.filter { it.department == "design" }
@@ -84,8 +90,46 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
 
             else -> emptyList<UserEntity>()
         }
-        val list2 = list1.sortedBy { it.firstName }
-        _checkList.value = list1.isNotEmpty()
-        return list2
+
+        val departmentListSortBySortMode = when(true) {
+            _sortMode.value -> sortListByBirthday(departmentFilterList)
+            else -> sortListByAlphabet(departmentFilterList)
+        }
+
+        _checkListEmpty.value = departmentFilterList.isNotEmpty()
+        return departmentListSortBySortMode
+    }
+
+    private fun sortListByBirthday(list: List<UserEntity>): List<UserEntity> {
+        val currentDate =  Calendar.getInstance()
+        val currentDayOfYear = currentDate.get(Calendar.DAY_OF_YEAR)
+        val thisYearList = mutableListOf<UserEntity>()
+        val followingYearList = mutableListOf<UserEntity>()
+
+        for (user in list) {
+            user.sortMode = true
+            if (user.birthday.dayOfYear >= currentDayOfYear) {
+                thisYearList.add(user)
+            }else {
+                followingYearList.add(user)
+            }
+        }
+
+        val thisYearListSort = thisYearList.sortedBy  { it.birthday.dayOfYear }.toList()
+        val followingYearListSort = followingYearList.sortedBy { it.birthday.dayOfYear }.toList()
+
+        return thisYearListSort + followingYearListSort
+
+    }
+
+    private fun sortListByAlphabet(list: List<UserEntity>): List<UserEntity> {
+        val listSort1 = mutableListOf<UserEntity>()
+        if (list.isNotEmpty()){
+            for (user in list) {
+                user.sortMode = false
+                listSort1.add(user)
+            }
+        }
+        return listSort1.toList().sortedBy { it.firstName }
     }
 }

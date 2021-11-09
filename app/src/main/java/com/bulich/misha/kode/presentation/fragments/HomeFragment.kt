@@ -1,18 +1,16 @@
 package com.bulich.misha.kode.presentation.fragments
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.TableLayout
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.transition.Visibility
 import com.bulich.misha.kode.R
 import com.bulich.misha.kode.databinding.FragmentHomeBinding
 import com.bulich.misha.kode.presentation.adapters.UserListAdapter
@@ -26,7 +24,9 @@ import javax.inject.Inject
 
 class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
-    private var tabPos: Int = 1
+    private var alphabetRadioButton = false
+    private var birthdayRadioButton = false
+    private var tabSavePosition: TabLayout.Tab? = null
 
     @Inject
     lateinit var factory: HomeViewModelFactory
@@ -34,6 +34,7 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private val viewModel: HomeViewModel by lazy {
         ViewModelProvider(this, factory)[HomeViewModel::class.java]
     }
+
 
     private lateinit var userAdapter: UserListAdapter
 
@@ -53,7 +54,10 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         windows?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         windows?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         windows?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+
+        radioButtonStatus()
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,17 +65,31 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 //        binding.toolbarHomeFragment.inflateMenu(R.menu.filter_menu)
         binding.toolbarHomeFragment.setOnMenuItemClickListener(this)
+        Log.d("onCreateView", "Загружен")
         setupRecyclerView()
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        Log.d("onViewCreate", "Загружен")
         binding.swipResecler.setOnRefreshListener {
             viewModel.getUserList()
             binding.swipResecler.isRefreshing = false
         }
+
+        if (tabSavePosition != null) {
+
+            binding.tabLayoutCategories.selectTab(tabSavePosition)
+            viewModel.userFilterList.observe(viewLifecycleOwner) {
+                userAdapter.submitList(viewModel.getDepartmentFilterList(it, tabSavePosition?.position))
+            }
+        }
+
+
 
         binding.mySearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -80,29 +98,35 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                viewModel.filterNameList(newText)
+                viewModel.getFilterSearchList(newText)
                 return true
             }
 
         })
 
-        viewModel.checkList.observe(viewLifecycleOwner){
+        viewModel.sortMode.observe(viewLifecycleOwner){
+            Log.d("SORDMODE", "$it")
+        }
+
+        viewModel.checkListEmpty.observe(viewLifecycleOwner) {
             visibilityCheck(it)
         }
 
 
         if (binding.tabLayoutCategories.selectedTabPosition == 0) {
-            viewModel.userFilterList.observe(viewLifecycleOwner){
-                userAdapter.submitList(it)
+            viewModel.userFilterList.observe(viewLifecycleOwner) {
+                userAdapter.submitList(viewModel.getDepartmentFilterList(it, binding.tabLayoutCategories.selectedTabPosition))
             }
         }
 
 
-        binding.tabLayoutCategories.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
+        binding.tabLayoutCategories.addOnTabSelectedListener(object :
+            TabLayout.OnTabSelectedListener {
 
-                viewModel.userFilterList.observe(viewLifecycleOwner){
-                    userAdapter.submitList(viewModel.departmentFilter(it, tab?.position))
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tabSavePosition = tab
+                viewModel.userFilterList.observe(viewLifecycleOwner) {
+                    userAdapter.submitList(viewModel.getDepartmentFilterList(it, tab?.position))
                 }
             }
 
@@ -136,9 +160,10 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         }
     }
 
-    private fun setupRecyclerOnClickListener(){
+    private fun setupRecyclerOnClickListener() {
         userAdapter.onUserEntityClickListener = {
-            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment2(it))
+            findNavController()
+                .navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment2(it))
         }
 
     }
@@ -148,21 +173,30 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         _binding = null
     }
 
-    override fun onResume() {
-        super.onResume()
-
-
-    }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
-        when(item?.itemId) {
-            R.id.filter_item -> {findNavController()
-                .navigate(HomeFragmentDirections.actionHomeFragmentToSortBottomSheetFragment())}
+        when (item?.itemId) {
+            R.id.filter_item -> {
+                findNavController()
+                    .navigate(HomeFragmentDirections.actionHomeFragmentToSortBottomSheetFragment())
+            }
         }
         return true
     }
 
-    private fun radioButtonStatus(){
+    private fun radioButtonStatus() {
+        val sp: SharedPreferences = requireContext()
+            .getSharedPreferences(SortBottomSheetFragment.SHARED_KEY, Context.MODE_PRIVATE)
+
+        alphabetRadioButton = sp.getBoolean(SortBottomSheetFragment.BUTTON_ALPHABET, false)
+        birthdayRadioButton = sp.getBoolean(SortBottomSheetFragment.BUTTON_BIRTHDAY, false)
+
+        when(true) {
+            alphabetRadioButton -> viewModel.setSortMode(false)
+            birthdayRadioButton -> viewModel.setSortMode(true)
+            else -> viewModel.setSortMode(false)
+        }
+
 
     }
 

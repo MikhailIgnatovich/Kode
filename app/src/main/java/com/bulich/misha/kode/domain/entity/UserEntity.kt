@@ -14,6 +14,7 @@ data class UserEntity(
     val userTag: String,
     val department: String,
     val position: String,
-    val birthday: String,
-    val phone: String
+    val birthday: LocalDate,
+    val phone: String,
+    var sortMode: Boolean
 ): Parcelable

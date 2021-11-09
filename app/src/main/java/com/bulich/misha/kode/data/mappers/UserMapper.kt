@@ -21,7 +21,8 @@ class UserMapper @Inject constructor() {
             department = user.department,
             position = user.position,
             birthday = setupFormatDate(user.birthday),
-            phone = user.phone
+            phone = user.phone,
+            sortMode = false
         )
     }
 
@@ -33,14 +34,14 @@ class UserMapper @Inject constructor() {
         return list.toList()
     }
 
-    private fun setupFormatDate(string: String): String {
+    private fun setupFormatDate(string: String): LocalDate {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-//        val date = LocalDate.parse(string, formatter)
+        val date = LocalDate.parse(string, formatter)
 //        val date1 = date.format()
 //        return date
-        val date = formatter.parse(string)
-        val date1 = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru")).format(date)
-        return date1
+//        val date = formatter.parse(string)
+//        val date1 = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru")).format(date)
+        return date
 
     }
 //    val firstDate = "08/08/2019"

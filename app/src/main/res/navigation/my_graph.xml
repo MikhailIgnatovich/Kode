@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_sortBottomSheetFragment"
-            app:destination="@id/sortBottomSheetFragment" />
+            app:destination="@id/sortBottomSheetFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_homeFragment_to_detailsFragment2"
             app:destination="@id/detailsFragment"
