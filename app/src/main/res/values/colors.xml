@@ -12,4 +12,6 @@
     <color name="tv_position_text_color">#55555C</color>
     <color name="tv_tag_text_color">#97979B</color>
     <color name="background_details_cardview">#F7F7F8</color>
+    <color name="background_snackBar_color_status">#6534FF</color>
+    <color name="background_snackBar_color_error">@android:color/holo_red_dark</color>
 </resources>

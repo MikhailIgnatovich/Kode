@@ -1,8 +1,10 @@
 package com.bulich.misha.kode.presentation.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.bulich.misha.kode.domain.entity.UserEntity
 import com.bulich.misha.kode.domain.useCase.GetListUserEntityUseCase
+import com.bulich.misha.kode.domain.util.Resource
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.HashSet
@@ -25,22 +27,49 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
     val sortMode: LiveData<Boolean>
         get() = _sortMode
 
+    private var _loadingStatus = MutableLiveData<Boolean>()
+    val loadingStatus: LiveData<Boolean>
+        get() = _loadingStatus
+
+    private var _loadingError = MutableLiveData<String>()
+    val loadingError: LiveData<String>
+        get() = _loadingError
+
+
+
 
     init {
-        getUserList()
+//        getUserList()
+        loadUserEntityList()
     }
 
     fun setSortMode(boolean: Boolean) {
         _sortMode.value = boolean
     }
 
-     fun getUserList() {
+    fun loadUserEntityList() {
         viewModelScope.launch {
-            _userList.value = getListUserEntityUseCase.getListUserEntity()
+            _loadingStatus.value = true
+            when(val response = getListUserEntityUseCase.getListUserEntity()){
+                is Resource.Success -> {_userList.value = response.data!!
+                _loadingStatus.value = false}
+                is Resource.Error -> {
+                    _loadingStatus.value = false
+                    _loadingError.value = response.message.toString()
+
+                }
+            }
             _userFilterList.value = _userList.value
             _checkListEmpty.value = true
         }
     }
+//     fun getUserList() {
+//        viewModelScope.launch {
+//            _userList.value = getListUserEntityUseCase.getListUserEntity()
+//            _userFilterList.value = _userList.value
+//            _checkListEmpty.value = true
+//        }
+//    }
 
     fun getFilterSearchList(name: String) {
         viewModelScope.launch {

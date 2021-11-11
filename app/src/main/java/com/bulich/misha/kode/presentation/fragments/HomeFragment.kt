@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -17,6 +18,7 @@ import com.bulich.misha.kode.presentation.adapters.UserListAdapter
 import com.bulich.misha.kode.presentation.appComponent
 import com.bulich.misha.kode.presentation.factories.HomeViewModelFactory
 import com.bulich.misha.kode.presentation.viewmodels.HomeViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import java.lang.RuntimeException
 import javax.inject.Inject
@@ -24,6 +26,7 @@ import javax.inject.Inject
 
 class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
+    lateinit var snackbar: Snackbar
     private var alphabetRadioButton = false
     private var birthdayRadioButton = false
     private var tabSavePosition: TabLayout.Tab? = null
@@ -56,6 +59,8 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         windows?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
 
         radioButtonStatus()
+
+
     }
 
     override fun onCreateView(
@@ -66,6 +71,7 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 //        binding.toolbarHomeFragment.inflateMenu(R.menu.filter_menu)
         binding.toolbarHomeFragment.setOnMenuItemClickListener(this)
         Log.d("onCreateView", "Загружен")
+        snackbar = snackBarStatus()
         setupRecyclerView()
 
         return binding.root
@@ -74,18 +80,38 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.loadingStatus.observe(viewLifecycleOwner) {
+            if (it) {
+                snackbar.show()
+            } else {
+                snackbar.dismiss()
+                binding.swipResecler.isRefreshing = false
+            }
+        }
+
+        viewModel.loadingError.observe(viewLifecycleOwner) {
+            if (it != null) {
+                snackBarError(it).show()
+            }
+        }
+
 
         Log.d("onViewCreate", "Загружен")
         binding.swipResecler.setOnRefreshListener {
-            viewModel.getUserList()
-            binding.swipResecler.isRefreshing = false
+            viewModel.loadUserEntityList()
+
         }
 
         if (tabSavePosition != null) {
 
             binding.tabLayoutCategories.selectTab(tabSavePosition)
             viewModel.userFilterList.observe(viewLifecycleOwner) {
-                userAdapter.submitList(viewModel.getDepartmentFilterList(it, tabSavePosition?.position))
+                userAdapter.submitList(
+                    viewModel.getDepartmentFilterList(
+                        it,
+                        tabSavePosition?.position
+                    )
+                )
             }
         }
 
@@ -104,7 +130,7 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
         })
 
-        viewModel.sortMode.observe(viewLifecycleOwner){
+        viewModel.sortMode.observe(viewLifecycleOwner) {
             Log.d("SORDMODE", "$it")
         }
 
@@ -115,7 +141,14 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
         if (binding.tabLayoutCategories.selectedTabPosition == 0) {
             viewModel.userFilterList.observe(viewLifecycleOwner) {
-                userAdapter.submitList(viewModel.getDepartmentFilterList(it, binding.tabLayoutCategories.selectedTabPosition))
+                if (it != null) {
+                    userAdapter.submitList(
+                        viewModel.getDepartmentFilterList(
+                            it,
+                            binding.tabLayoutCategories.selectedTabPosition
+                        )
+                    )
+                }
             }
         }
 
@@ -191,13 +224,31 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         alphabetRadioButton = sp.getBoolean(SortBottomSheetFragment.BUTTON_ALPHABET, false)
         birthdayRadioButton = sp.getBoolean(SortBottomSheetFragment.BUTTON_BIRTHDAY, false)
 
-        when(true) {
+        when (true) {
             alphabetRadioButton -> viewModel.setSortMode(false)
             birthdayRadioButton -> viewModel.setSortMode(true)
             else -> viewModel.setSortMode(false)
         }
 
 
+    }
+
+    private fun snackBarStatus(): Snackbar {
+        return Snackbar.make(
+            binding.ivSearchEmpty,
+            "Секундочку, гружусь...",
+            Snackbar.LENGTH_INDEFINITE
+        )
+            .setBackgroundTint(resources.getColor(R.color.background_snackBar_color_status))
+    }
+
+    private fun snackBarError(string: String): Snackbar {
+        return Snackbar.make(
+            binding.ivSearchEmpty,
+            "$string",
+            Snackbar.LENGTH_LONG
+        )
+            .setBackgroundTint(resources.getColor(R.color.background_snackBar_color_error))
     }
 
 }
