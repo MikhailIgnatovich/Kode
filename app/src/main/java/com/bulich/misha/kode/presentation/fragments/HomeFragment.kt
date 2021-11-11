@@ -92,6 +92,7 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         viewModel.loadingError.observe(viewLifecycleOwner) {
             if (it != null) {
                 snackBarError(it).show()
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToErrorFragment())
             }
         }
 

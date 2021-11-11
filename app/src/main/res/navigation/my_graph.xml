@@ -19,6 +19,9 @@
             android:id="@+id/action_homeFragment_to_detailsFragment2"
             app:destination="@id/detailsFragment"
             app:popUpTo="@id/homeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_errorFragment"
+            app:destination="@id/errorFragment" />
     </fragment>
     <dialog
         android:id="@+id/sortBottomSheetFragment"
@@ -40,5 +43,14 @@
         <argument
             android:name="user_enttity"
             app:argType="com.bulich.misha.kode.domain.entity.UserEntity" />
+    </fragment>
+    <fragment
+        android:id="@+id/errorFragment"
+        android:name="com.bulich.misha.kode.presentation.fragments.ErrorFragment"
+        android:label="ErrorFragment"
+        tools:layout="@layout/fragment_error">
+        <action
+            android:id="@+id/action_errorFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>
