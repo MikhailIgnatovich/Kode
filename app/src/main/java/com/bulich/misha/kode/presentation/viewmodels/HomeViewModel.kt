@@ -1,15 +1,20 @@
 package com.bulich.misha.kode.presentation.viewmodels
 
-import android.util.Log
+
 import androidx.lifecycle.*
 import com.bulich.misha.kode.domain.entity.UserEntity
+import com.bulich.misha.kode.domain.useCase.GetInternetConnectionStatus
 import com.bulich.misha.kode.domain.useCase.GetListUserEntityUseCase
 import com.bulich.misha.kode.domain.util.Resource
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.HashSet
 
-class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCase) : ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val getListUserEntityUseCase: GetListUserEntityUseCase,
+    private val getInternetConnectionStatus: GetInternetConnectionStatus
+) : ViewModel() {
 
     private var _userList = MutableLiveData<List<UserEntity>>()
     val userList: LiveData<List<UserEntity>>
@@ -35,7 +40,9 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
     val loadingError: LiveData<String>
         get() = _loadingError
 
-
+    private var _internetConnectionStatus = MutableLiveData<Boolean>()
+    val internetConnectionStatus: LiveData<Boolean>
+        get() = _internetConnectionStatus
 
 
     init {
@@ -49,18 +56,25 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
 
     fun loadUserEntityList() {
         viewModelScope.launch {
-            _loadingStatus.value = true
-            when(val response = getListUserEntityUseCase.getListUserEntity()){
-                is Resource.Success -> {_userList.value = response.data!!
-                _loadingStatus.value = false}
-                is Resource.Error -> {
-                    _loadingStatus.value = false
-                    _loadingError.value = response.message.toString()
+            _internetConnectionStatus.value = getInternetConnectionStatus.connectionInternetStatus()
 
+            if (getInternetConnectionStatus.connectionInternetStatus()){
+                _loadingStatus.value = true
+                when (val response = getListUserEntityUseCase.getListUserEntity()) {
+                    is Resource.Success -> {
+                        _userList.value = response.data!!
+                        _loadingStatus.value = false
+                    }
+                    is Resource.Error -> {
+                        _loadingStatus.value = false
+                        _loadingError.value = response.message.toString()
+
+                    }
                 }
+                _userFilterList.value = _userList.value
+                _checkListEmpty.value = true
             }
-            _userFilterList.value = _userList.value
-            _checkListEmpty.value = true
+
         }
     }
 //     fun getUserList() {
@@ -107,20 +121,20 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
     fun getDepartmentFilterList(list: List<UserEntity>, position: Int?): List<UserEntity> {
 
         val departmentFilterList = when (position) {
-            0 ->  list
+            0 -> list
 
             1 -> list.filter { it.department == "design" }
 
-            2 ->  list.filter { it.department == "analytics" }
+            2 -> list.filter { it.department == "analytics" }
 
-            3 ->  list.filter { it.department == "management" }
+            3 -> list.filter { it.department == "management" }
 
-            4 ->  list.filter { it.department == "ios" }
+            4 -> list.filter { it.department == "ios" }
 
             else -> emptyList<UserEntity>()
         }
 
-        val departmentListSortBySortMode = when(true) {
+        val departmentListSortBySortMode = when (true) {
             _sortMode.value -> sortListByBirthday(departmentFilterList)
             else -> sortListByAlphabet(departmentFilterList)
         }
@@ -130,7 +144,7 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
     }
 
     private fun sortListByBirthday(list: List<UserEntity>): List<UserEntity> {
-        val currentDate =  Calendar.getInstance()
+        val currentDate = Calendar.getInstance()
         val currentDayOfYear = currentDate.get(Calendar.DAY_OF_YEAR)
         val thisYearList = mutableListOf<UserEntity>()
         val followingYearList = mutableListOf<UserEntity>()
@@ -139,12 +153,12 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
             user.sortMode = true
             if (user.birthday.dayOfYear >= currentDayOfYear) {
                 thisYearList.add(user)
-            }else {
+            } else {
                 followingYearList.add(user)
             }
         }
 
-        val thisYearListSort = thisYearList.sortedBy  { it.birthday.dayOfYear }.toList()
+        val thisYearListSort = thisYearList.sortedBy { it.birthday.dayOfYear }.toList()
         val followingYearListSort = followingYearList.sortedBy { it.birthday.dayOfYear }.toList()
 
         return thisYearListSort + followingYearListSort
@@ -153,12 +167,17 @@ class HomeViewModel(private val getListUserEntityUseCase: GetListUserEntityUseCa
 
     private fun sortListByAlphabet(list: List<UserEntity>): List<UserEntity> {
         val listSort1 = mutableListOf<UserEntity>()
-        if (list.isNotEmpty()){
+        if (list.isNotEmpty()) {
             for (user in list) {
                 user.sortMode = false
                 listSort1.add(user)
             }
         }
         return listSort1.toList().sortedBy { it.firstName }
+    }
+
+    private fun internetConnectionStatus() {
+
+
     }
 }

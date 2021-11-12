@@ -14,4 +14,18 @@ interface ApiService {
     )
     @GET("users")
     suspend fun getUsersFromServer(): Response<Items>
+
+    @Headers(
+        "Content-Type: application/json",
+        "Prefer: code=200, dynamic=true"
+    )
+    @GET("users")
+    suspend fun getTestUsersFromServer(): Response<Items>
+
+    @Headers(
+        "Content-Type: application/json",
+        "Prefer: code=500, example=error-500"
+    )
+    @GET("users")
+    suspend fun getErrorUsersFromServer(): Response<Items>
 }

@@ -53,10 +53,10 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val windows = activity?.window
-        windows?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        windows?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        windows?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+//        val windows = activity?.window
+//        windows?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//        windows?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//        windows?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
 
         radioButtonStatus()
 
@@ -70,8 +70,9 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 //        binding.toolbarHomeFragment.inflateMenu(R.menu.filter_menu)
         binding.toolbarHomeFragment.setOnMenuItemClickListener(this)
-        Log.d("onCreateView", "Загружен")
+
         snackbar = snackBarStatus()
+
         setupRecyclerView()
 
         return binding.root
@@ -91,7 +92,14 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
         viewModel.loadingError.observe(viewLifecycleOwner) {
             if (it != null) {
-                snackBarError(it).show()
+                snackBarApiError(it).show()
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToErrorFragment())
+            }
+        }
+
+        viewModel.internetConnectionStatus.observe(viewLifecycleOwner){
+            if (!it){
+                snackBarInternetStatus().show()
                 findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToErrorFragment())
             }
         }
@@ -237,16 +245,25 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private fun snackBarStatus(): Snackbar {
         return Snackbar.make(
             binding.ivSearchEmpty,
-            "Секундочку, гружусь...",
+            R.string.snackBarStatus,
             Snackbar.LENGTH_INDEFINITE
         )
             .setBackgroundTint(resources.getColor(R.color.background_snackBar_color_status))
     }
 
-    private fun snackBarError(string: String): Snackbar {
+    private fun snackBarApiError(string: String): Snackbar {
         return Snackbar.make(
             binding.ivSearchEmpty,
-            "$string",
+            R.string.snackBarApiError,
+            Snackbar.LENGTH_LONG
+        )
+            .setBackgroundTint(resources.getColor(R.color.background_snackBar_color_error))
+    }
+
+    private fun snackBarInternetStatus(): Snackbar {
+        return Snackbar.make(
+            binding.ivSearchEmpty,
+            R.string.snackBarInternetError,
             Snackbar.LENGTH_LONG
         )
             .setBackgroundTint(resources.getColor(R.color.background_snackBar_color_error))

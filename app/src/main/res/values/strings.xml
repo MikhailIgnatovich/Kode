@@ -12,4 +12,7 @@
     <string name="tv_search_empty_text1">Мы никого не нашли</string>
     <string name="tv_search_empty_text2">Попробуй скорректировать запрос</string>
     <string name="tv_sort_text">Сортировка</string>
+    <string name="snackBarApiError">Не могу обновить данные. \nЧто-то пошло не так</string>
+    <string name="snackBarInternetError">Не могу обновить данные.\nПроверьте соединение с интернетом.</string>
+    <string name="snackBarStatus">Секундочку, гружусь...</string>
 </resources>
