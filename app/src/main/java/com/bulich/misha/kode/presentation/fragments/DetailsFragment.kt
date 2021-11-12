@@ -1,10 +1,13 @@
 package com.bulich.misha.kode.presentation.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.isDigitsOnly
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bulich.misha.kode.databinding.FragmentDetailsBinding
@@ -61,6 +64,12 @@ class DetailsFragment : Fragment() {
             tvUserOldDetails.text = parseOld(parseBirthdayDate(args.userEnttity.birthday))
 
             tvUserPhoneDetails.text = parsePhoneNumber(args.userEnttity.phone)
+
+            tvUserPhoneDetails.setOnClickListener {
+                val phoneNumber ="+7" + args.userEnttity.phone.filter { it.isDigit() }
+                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null))
+                startActivity(intent)
+            }
         }
 
     }
