@@ -3,13 +3,10 @@ package com.bulich.misha.kode.presentation.fragments
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bulich.misha.kode.R
@@ -26,7 +23,7 @@ import javax.inject.Inject
 
 class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
-    lateinit var snackbar: Snackbar
+    private lateinit var snackBar: Snackbar
     private var alphabetRadioButton = false
     private var birthdayRadioButton = false
     private var tabSavePosition: TabLayout.Tab? = null
@@ -37,7 +34,6 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     private val viewModel: HomeViewModel by lazy {
         ViewModelProvider(this, factory)[HomeViewModel::class.java]
     }
-
 
     private lateinit var userAdapter: UserListAdapter
 
@@ -53,13 +49,8 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        val windows = activity?.window
-//        windows?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-//        windows?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-//        windows?.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
 
         radioButtonStatus()
-
 
     }
 
@@ -68,10 +59,10 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-//        binding.toolbarHomeFragment.inflateMenu(R.menu.filter_menu)
+
         binding.toolbarHomeFragment.setOnMenuItemClickListener(this)
 
-        snackbar = snackBarStatus()
+        snackBar = snackBarStatus()
 
         setupRecyclerView()
 
@@ -81,38 +72,13 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.loadingStatus.observe(viewLifecycleOwner) {
-            if (it) {
-                snackbar.show()
-            } else {
-                snackbar.dismiss()
-                binding.swipResecler.isRefreshing = false
-            }
-        }
+        observeViewModel()
 
-        viewModel.loadingError.observe(viewLifecycleOwner) {
-            if (it != null) {
-                snackBarApiError(it).show()
-                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToErrorFragment())
-            }
-        }
-
-        viewModel.internetConnectionStatus.observe(viewLifecycleOwner){
-            if (!it){
-                snackBarInternetStatus().show()
-                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToErrorFragment())
-            }
-        }
-
-
-        Log.d("onViewCreate", "Загружен")
-        binding.swipResecler.setOnRefreshListener {
+        binding.swipeRecycler.setOnRefreshListener {
             viewModel.loadUserEntityList()
-
         }
 
         if (tabSavePosition != null) {
-
             binding.tabLayoutCategories.selectTab(tabSavePosition)
             viewModel.userFilterList.observe(viewLifecycleOwner) {
                 userAdapter.submitList(
@@ -125,27 +91,7 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         }
 
 
-
-        binding.mySearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                viewModel.getFilterSearchList(newText)
-                return true
-            }
-
-        })
-
-        viewModel.sortMode.observe(viewLifecycleOwner) {
-            Log.d("SORDMODE", "$it")
-        }
-
-        viewModel.checkListEmpty.observe(viewLifecycleOwner) {
-            visibilityCheck(it)
-        }
+        searchInList()
 
 
         if (binding.tabLayoutCategories.selectedTabPosition == 0) {
@@ -162,6 +108,11 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
         }
 
 
+        tabLayoutListener()
+
+    }
+
+    private fun tabLayoutListener() {
         binding.tabLayoutCategories.addOnTabSelectedListener(object :
             TabLayout.OnTabSelectedListener {
 
@@ -181,7 +132,49 @@ class HomeFragment : Fragment(), Toolbar.OnMenuItemClickListener {
             }
 
         })
+    }
 
+    private fun observeViewModel() {
+        viewModel.loadingStatus.observe(viewLifecycleOwner) {
+            if (it) {
+                snackBar.show()
+            } else {
+                snackBar.dismiss()
+                binding.swipeRecycler.isRefreshing = false
+            }
+        }
+
+        viewModel.loadingError.observe(viewLifecycleOwner) {
+            if (it != null) {
+                snackBarApiError(it).show()
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToErrorFragment())
+            }
+        }
+
+        viewModel.internetConnectionStatus.observe(viewLifecycleOwner) {
+            if (!it) {
+                snackBarInternetStatus().show()
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToErrorFragment())
+            }
+        }
+
+        viewModel.checkListEmpty.observe(viewLifecycleOwner) {
+            visibilityCheck(it)
+        }
+    }
+
+    private fun searchInList() {
+        binding.mySearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                viewModel.getFilterSearchList(newText)
+                return true
+            }
+
+        })
     }
 
     private fun visibilityCheck(it: Boolean) {

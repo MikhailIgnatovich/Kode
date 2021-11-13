@@ -17,7 +17,7 @@
                 android:layout_width="54dp"
                 android:layout_height="4dp"
                 android:layout_marginTop="12dp"
-                android:background="#C3C3C6"
+                android:background="@color/sort_bottom_sheet_line"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/inter_medium"
-                    android:text="По алфавиту"
+                    android:text="@string/radio_button_alphabet"
                     android:textColor="@color/tab_text_selected"
                     android:textSize="16sp" />
 
@@ -59,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/inter_medium"
-                    android:text="По дню рождения"
+                    android:text="@string/radio_button_birthday"
                     android:textColor="@color/tab_text_selected"
                     android:textSize="16sp" />
             </RadioGroup>
@@ -70,7 +70,7 @@
                 android:layout_height="5dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="9dp"
-                android:background="#C3C3C6"
+                android:background="@color/sort_bottom_sheet_line"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

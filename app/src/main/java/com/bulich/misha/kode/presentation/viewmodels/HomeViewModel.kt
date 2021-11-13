@@ -46,8 +46,9 @@ class HomeViewModel @Inject constructor(
 
 
     init {
-//        getUserList()
+
         loadUserEntityList()
+
     }
 
     fun setSortMode(boolean: Boolean) {
@@ -77,13 +78,6 @@ class HomeViewModel @Inject constructor(
 
         }
     }
-//     fun getUserList() {
-//        viewModelScope.launch {
-//            _userList.value = getListUserEntityUseCase.getListUserEntity()
-//            _userFilterList.value = _userList.value
-//            _checkListEmpty.value = true
-//        }
-//    }
 
     fun getFilterSearchList(name: String) {
         viewModelScope.launch {
@@ -122,14 +116,18 @@ class HomeViewModel @Inject constructor(
 
         val departmentFilterList = when (position) {
             0 -> list
-
-            1 -> list.filter { it.department == "design" }
-
-            2 -> list.filter { it.department == "analytics" }
-
-            3 -> list.filter { it.department == "management" }
-
-            4 -> list.filter { it.department == "ios" }
+            1 -> list.filter { it.department == "Android" }
+            2 -> list.filter { it.department == "iOS" }
+            3 -> list.filter { it.department == "Дизайн" }
+            4 -> list.filter { it.department == "Менеджмент" }
+            5 -> list.filter { it.department == "QA" }
+            6 -> list.filter { it.department == "Бэк-офис" }
+            7 -> list.filter { it.department == "Frontend" }
+            8 -> list.filter { it.department == "HR" }
+            9 -> list.filter { it.department == "PR" }
+            10 -> list.filter { it.department == "Backend" }
+            11 -> list.filter { it.department == "Техподдержка" }
+            12 -> list.filter { it.department == "Аналитика" }
 
             else -> emptyList<UserEntity>()
         }
@@ -174,10 +172,5 @@ class HomeViewModel @Inject constructor(
             }
         }
         return listSort1.toList().sortedBy { it.firstName }
-    }
-
-    private fun internetConnectionStatus() {
-
-
     }
 }

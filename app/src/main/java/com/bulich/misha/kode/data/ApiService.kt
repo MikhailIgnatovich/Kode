@@ -1,7 +1,6 @@
 package com.bulich.misha.kode.data
 
 import com.bulich.misha.kode.data.models.Items
-import com.bulich.misha.kode.domain.util.Resource
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers

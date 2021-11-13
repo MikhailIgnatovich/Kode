@@ -38,8 +38,8 @@
                         app:menu="@menu/filter_menu">
 
                         <androidx.appcompat.widget.SearchView
-                            style="@style/MyStyle"
                             android:id="@+id/my_search"
+                            style="@style/MyStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
@@ -74,82 +74,116 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/item_tab_designer" />
+                    android:text="@string/item_tab_android" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/item_tab_analysts" />
+                    android:text="@string/item_tab_ios" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/item_tab_managers" />
+                    android:text="@string/item_tab_design" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/item_tab_io" />
+                    android:text="@string/item_tab_management" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_tab_qa" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_tab_back_office" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_tab_frontend" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_tab_hr" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_tab_pr" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_tab_backend" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_tab_support" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_tab_analytics" />
 
             </com.google.android.material.tabs.TabLayout>
+
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipResecler"
+                android:id="@+id/swipe_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@id/tab_layout_categories"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/tab_layout_categories">
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view_people"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintTop_toBottomOf="@id/tab_layout_categories"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/tab_layout_categories" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/recycler_view_people"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/tab_layout_categories"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent" />-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/empty_search"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/tab_layout_categories"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/tab_layout_categories">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_search_empty"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginTop="80dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/search_empty"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:src="@drawable/search_empty"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_search_empty1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_medium"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/tab_text_selected"
+                    android:fontFamily="@font/inter_medium"
                     android:text="@string/tv_search_empty_text1"
-                    android:textStyle="bold"
+                    android:textColor="@color/tab_text_selected"
                     android:textSize="17sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv_search_empty" />
@@ -158,12 +192,12 @@
                     android:id="@+id/tv_search_empty2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_medium"
                     android:layout_marginTop="12dp"
-                    android:textColor="@color/tv_tag_text_color"
+                    android:fontFamily="@font/inter_medium"
                     android:text="@string/tv_search_empty_text2"
-                    android:textStyle="normal"
+                    android:textColor="@color/tv_tag_text_color"
                     android:textSize="16sp"
+                    android:textStyle="normal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_search_empty1" />

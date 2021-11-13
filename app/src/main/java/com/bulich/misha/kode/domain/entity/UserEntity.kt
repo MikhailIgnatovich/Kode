@@ -3,7 +3,6 @@ package com.bulich.misha.kode.domain.entity
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 @Parcelize
 data class UserEntity(

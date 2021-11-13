@@ -1,6 +1,5 @@
 package com.bulich.misha.kode.presentation.factories
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bulich.misha.kode.domain.useCase.GetInternetConnectionStatus

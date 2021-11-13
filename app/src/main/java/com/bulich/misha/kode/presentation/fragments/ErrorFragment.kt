@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.bulich.misha.kode.R
 import com.bulich.misha.kode.databinding.FragmentErrorBinding
 import java.lang.RuntimeException
 
@@ -16,6 +15,7 @@ class ErrorFragment : Fragment() {
     private var _binding: FragmentErrorBinding? = null
     private val binding: FragmentErrorBinding
         get() = _binding ?: throw RuntimeException("FragmentErrorBinding == null")
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

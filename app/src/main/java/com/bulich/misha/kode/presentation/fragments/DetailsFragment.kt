@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.text.isDigitsOnly
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bulich.misha.kode.databinding.FragmentDetailsBinding
@@ -39,7 +38,6 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-
         with(binding) {
 
             Glide.with(ivUserPhotoDetails)
@@ -51,7 +49,7 @@ class DetailsFragment : Fragment() {
                 String.format(args.userEnttity.firstName.replaceFirstChar { it.uppercase() }
                         + " " + args.userEnttity.lastName.replaceFirstChar { it.uppercase() })
 
-            tvUserPositionDetails.text = args.userEnttity.position
+            tvUserPositionDetails.text = args.userEnttity.department
 
             tvUserTagDetails.text = args.userEnttity.userTag
 
@@ -66,7 +64,7 @@ class DetailsFragment : Fragment() {
             tvUserPhoneDetails.text = parsePhoneNumber(args.userEnttity.phone)
 
             tvUserPhoneDetails.setOnClickListener {
-                val phoneNumber ="+7" + args.userEnttity.phone.filter { it.isDigit() }
+                val phoneNumber = "+7" + args.userEnttity.phone.filter { it.isDigit() }
                 val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null))
                 startActivity(intent)
             }
@@ -79,7 +77,7 @@ class DetailsFragment : Fragment() {
         _binding = null
     }
 
-    private fun parseBirthdayDate(date: LocalDate) : String {
+    private fun parseBirthdayDate(date: LocalDate): String {
 
         return DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru")).format(date)
     }

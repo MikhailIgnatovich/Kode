@@ -4,10 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.util.Log
 import com.bulich.misha.kode.data.ApiService
 import com.bulich.misha.kode.data.mappers.UserMapper
-import com.bulich.misha.kode.data.models.Items
 import com.bulich.misha.kode.domain.entity.UserEntity
 import com.bulich.misha.kode.domain.repository.UsersRepository
 import com.bulich.misha.kode.domain.util.Resource
@@ -19,11 +17,11 @@ class UsersRepositoryIMPL @Inject constructor(private val apiService: ApiService
     UsersRepository {
     @Inject
     lateinit var userMapper: UserMapper
+
     @Inject
     lateinit var application: Application
     override suspend fun getListUserEntity(): Resource<List<UserEntity>> {
         return try {
-
 
             val response = apiService.getUsersFromServer()
             val result = response.body()
@@ -40,19 +38,16 @@ class UsersRepositoryIMPL @Inject constructor(private val apiService: ApiService
 
     override suspend fun connectionInternetStatus(): Boolean {
         val connectivityManager =
-        application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (connectivityManager != null) {
             val capabilities =
                 connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             if (capabilities != null) {
                 if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
                     return true
                 } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
                     return true
                 } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
                     return true
                 }
             }
