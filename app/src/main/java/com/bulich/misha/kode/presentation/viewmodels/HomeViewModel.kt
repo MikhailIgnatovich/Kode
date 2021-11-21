@@ -116,18 +116,18 @@ class HomeViewModel @Inject constructor(
 
         val departmentFilterList = when (position) {
             0 -> list
-            1 -> list.filter { it.department == "Android" }
-            2 -> list.filter { it.department == "iOS" }
-            3 -> list.filter { it.department == "Дизайн" }
-            4 -> list.filter { it.department == "Менеджмент" }
-            5 -> list.filter { it.department == "QA" }
-            6 -> list.filter { it.department == "Бэк-офис" }
-            7 -> list.filter { it.department == "Frontend" }
-            8 -> list.filter { it.department == "HR" }
-            9 -> list.filter { it.department == "PR" }
-            10 -> list.filter { it.department == "Backend" }
-            11 -> list.filter { it.department == "Техподдержка" }
-            12 -> list.filter { it.department == "Аналитика" }
+            1 -> list.filter { it.department == "android" }
+            2 -> list.filter { it.department == "ios" }
+            3 -> list.filter { it.department == "design" }
+            4 -> list.filter { it.department == "management" }
+            5 -> list.filter { it.department == "qa" }
+            6 -> list.filter { it.department == "back_office" }
+            7 -> list.filter { it.department == "frontend" }
+            8 -> list.filter { it.department == "hr" }
+            9 -> list.filter { it.department == "pr" }
+            10 -> list.filter { it.department == "backend" }
+            11 -> list.filter { it.department == "support" }
+            12 -> list.filter { it.department == "analytics" }
 
             else -> emptyList<UserEntity>()
         }

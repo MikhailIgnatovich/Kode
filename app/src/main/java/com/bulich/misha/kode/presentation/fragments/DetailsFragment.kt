@@ -49,7 +49,7 @@ class DetailsFragment : Fragment() {
                 String.format(args.userEnttity.firstName.replaceFirstChar { it.uppercase() }
                         + " " + args.userEnttity.lastName.replaceFirstChar { it.uppercase() })
 
-            tvUserPositionDetails.text = args.userEnttity.department
+            tvUserPositionDetails.text = args.userEnttity.position
 
             tvUserTagDetails.text = args.userEnttity.userTag
 
