@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bulich.misha.kode.R
 import com.bulich.misha.kode.databinding.FragmentDetailsBinding
 import com.bumptech.glide.Glide
 import java.lang.RuntimeException
@@ -42,6 +43,7 @@ class DetailsFragment : Fragment() {
 
             Glide.with(ivUserPhotoDetails)
                 .load(args.userEnttity.avatarUrl)
+                .placeholder(R.drawable.rectangle)
                 .circleCrop()
                 .into(ivUserPhotoDetails)
 

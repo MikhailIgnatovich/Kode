@@ -55,6 +55,7 @@ class UserListAdapter :
                     tvTag.text = userItem.userTag
                     Glide.with(ivPhoto.context)
                         .load(userItem.avatarUrl)
+                        .placeholder(R.drawable.rectangle)
                         .circleCrop()
                         .into(ivPhoto)
                 }
@@ -72,6 +73,7 @@ class UserListAdapter :
                     tvDateBirthday.text = parseDateBirthday(userItem.birthday)
                     Glide.with(ivPhoto.context)
                         .load(userItem.avatarUrl)
+                        .placeholder(R.drawable.rectangle)
                         .circleCrop()
                         .into(ivPhoto)
                 }
